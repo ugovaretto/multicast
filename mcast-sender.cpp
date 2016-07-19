@@ -1,3 +1,13 @@
+//simple multicast sender: specify port and multicast address
+//on command line
+//compile with -std=c++11
+//author: Ugo Varetto
+
+//multicast: from 224.0.0.0 to 239.255.255.255
+//see: https://en.wikipedia.org/wiki/Multicast_address
+//use 225.x.x.x
+//reserved multicast addresses
+//http://www.iana.org/assignments/multicast-addresses/multicast-addresses.xhtml
 
 #include <sys/types.h>
 #include <sys/socket.h>
