@@ -14,19 +14,19 @@ using namespace std;
 using namespace chrono;
 int main(int argc, char** argv) {
     if(argc < 3) {
-        cerr << "usage: " << argv[0] << " <port> <multicast group ip address>"
+        cerr << "usage: " << argv[0] << " <port> <multicast group ip address> [message]"
              << endl;
         return EXIT_FAILURE;
     }
 
-    int port = stoi(argv[1]);
+    const int port = stoi(argv[1]);
     const string mcastIP = argv[2];
     const int fd = socket(AF_INET, SOCK_DGRAM, 0);
     if (fd< 0) {
          perror("socket");
          exit(EXIT_FAILURE);
      }
-    struct sockaddr_in addr;
+    sockaddr_in addr;
     memset(&addr, 0, sizeof(addr));
     addr.sin_family = AF_INET;
     addr.sin_addr.s_addr = inet_addr(mcastIP.c_str());
