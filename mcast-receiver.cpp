@@ -14,11 +14,13 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <cstring> //memset
+#include <unistd.h>
 
 #include <string>
 #include <iostream>
 #include <cstdlib>
 #include <vector>
+#include <sstream>
 
 using namespace std;
 
@@ -67,6 +69,13 @@ int main(int argc, char** argv) {
     int nbytes = -1;
     vector< char > msgbuf(MSGSIZE);
     socklen_t addrsize = socklen_t();
+    vector< char > hostname(0x100, '\0');
+    if(gethostname(hostname.data(), hostname.size()) < 0) {
+        perror("gethostname");
+        exit(EXIT_FAILURE);
+    }
+    ostringstream oss;
+    oss << "host: " << hostname.data() << " PID: " << getpid();  
     while(true) {
       nbytes = recvfrom(fd, msgbuf.data(), MSGSIZE, 0,
                         (struct sockaddr *) &addr, &addrsize);;
@@ -74,8 +83,8 @@ int main(int argc, char** argv) {
           perror("recvfrom");
           exit(EXIT_FAILURE);
       }
-       msgbuf[nbytes] = '\0';  
-       cout << msgbuf.data() << endl;
+      msgbuf[nbytes] = '\0';  
+      cout << oss.str() << " message: " << msgbuf.data() << endl;
     }
     return EXIT_SUCCESS;
 }
